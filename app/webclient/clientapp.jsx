@@ -13,17 +13,18 @@ injectTapEventPlugin();
 
 import Home from './components/Home.jsx';
 import ParentComponent from './components/UILayout/Parent.jsx';
-import NewTradeComponent from './components/NewTrade/NewTradeComponent.jsx';
+import ParentNewTrade from './components/NewTrade/ParentNewTrade.jsx';
 import TradeRecapComponent from './components/TradeRecap/TradeRecapComponent.jsx';
 import ConfirmTradeComponent from './components/ConfirmTrade/ConfirmTradeComponent.jsx'
 import Login from './components/Login.jsx';
+
 import {Route, Router, IndexRoute, hashHistory} from 'react-router';
 ReactDOM.render(
 	<MuiThemeProvider>
 	<Router history ={hashHistory} >
 	<Route path="/login" component={Login} />
 	<Route path="/" component={ParentComponent}>
-	<Route path="/newTrade" component={NewTradeComponent} />
+	<Route path="/newTrade" component={ParentNewTrade} />
 	<Route path="/tradeRecap" component={TradeRecapComponent} />
 	<Route path="/confirmTrade" component={ConfirmTradeComponent} />
 		<IndexRoute component={Home} />
