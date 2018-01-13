@@ -53,18 +53,48 @@ const style = {
 import {
   blue300,
 } from 'material-ui/styles/colors';
-
 export default class Nav extends React.Component{
-
 	state={
 		openDrawer:false
-	};
+  };
+  static get contextTypes() {
+    return {
+      router: React.PropTypes.object.isRequired
+    }
+  }
 
 	handleClose = () => this.setState({openDrawer: false});
-
-	handleToggle = () => this.setState({openDrawer: !this.state.openDrawer});
+  handleToggle = () => this.setState({openDrawer: !this.state.openDrawer});
+  
+  newTradeNavigation=()=>{
+    this.context.router.push('/newTrade');
+  }
+  dashboardNavigation=()=>{
+    this.context.router.push('/');
+  }
+  tradeRecapNavigation=()=>{
+    this.context.router.push('/tradeRecap');
+  }
+  confirmTradeNavigation=()=>{
+    this.context.router.push('/confirmTrade');
+  }
+  confirmParcelNavigation=()=>{
+    this.context.router.push("/confirmParcel");
+  }
+  pendingParcelNavigation=()=>{
+    this.context.router.push("/pendingParcel");
+  }
+  createParcelNavigation=()=>{
+    this.context.router.push("/confirmParcel");
+  }
+  handleLogout=()=>{
+    sessionStorage.removeItem('userLoginDetails');
+    this.context.router.push("/login");
+  }
 	render(){
-
+    let retrievedUserDetails= JSON.parse(sessionStorage.getItem('userLoginDetails'));
+    console.log(retrievedUserDetails);
+    if(retrievedUserDetails.roleType=="A"){
 		return(
 			<div>
 			 <AppBar
@@ -72,13 +102,12 @@ export default class Nav extends React.Component{
              iconClassNameRight="muidocs-icon-navigation-expand-more"
              onLeftIconButtonTouchTap={this.handleToggle}
              style={{position: "fixed",top:'0',backgroundColor: '#1f497d'}}
-             
-           >
-           
-           <FlatButton style={style.labelStyle1} label="Dashboard" />
-           <FlatButton style={style.labelStyle} label="Trade Recap" />
-           <FlatButton style={style.labelStyle} label="Confirmed Trades" />
-           <FlatButton style={style.buttonBorder} label="New Trade" />  
+            >
+           <FlatButton style={style.labelStyle1} label="Dashboard" onTouchTap={this.dashboardNavigation} />
+           <FlatButton style={style.labelStyle} label="Trade Recap" onTouchTap={this.tradeRecapNavigation} />
+           <FlatButton style={style.labelStyle} label="Confirmed Trades" onTouchTap={this.confirmTradeNavigation} />
+           <FlatButton style={style.buttonBorder} label="New Trade" onTouchTap={this.newTradeNavigation}>  
+            </FlatButton>
            <List>
                 <ListItem
                   disabled={true}
@@ -87,7 +116,6 @@ export default class Nav extends React.Component{
                     
                   }
                 >
-           
                 </ListItem>
           </List>
            </AppBar>
@@ -97,17 +125,15 @@ export default class Nav extends React.Component{
           width={200}
           open={this.state.openDrawer}
           onRequestChange={(openDrawer) => this.setState({openDrawer})}
-        >
+          >
 
-        <img src='http://downloadicons.net/sites/default/files/man-logo-icon-61344.png' 
+        <img src="images/profile-blank.png" 
         style={{width:'180px',height:'200px'}}/>
-        <center style={{fontWeight:'bold',fontSize:16}}>Hello Buddy</center>
-        
+        <center style={{fontWeight:'bold',fontSize:16}}>{retrievedUserDetails.username}</center>
           <MenuItem onTouchTap={this.handleClose}>
            <Link to="/"> Home </Link>
           </MenuItem>
-        
-					<MenuItem onTouchTap={this.handleClose}>
+        	<MenuItem onTouchTap={this.handleClose}>
           <Link to ="/newTrade">New Trade</Link>
           </MenuItem>
           <MenuItem onTouchTap={this.handleClose}>
@@ -116,8 +142,65 @@ export default class Nav extends React.Component{
           <MenuItem onTouchTap={this.handleClose}>
           <Link to ="/confirmTrade">Confirm Trade</Link>
           </MenuItem>
+          <MenuItem onTouchTap={this.handleLogout}>
+          Logout
+          </MenuItem>
         </Drawer>
         </div>
-			)
+      )
+    }else{
+      return(
+        <div>
+      <AppBar
+      title="Force Field App"
+      iconClassNameRight="muidocs-icon-navigation-expand-more"
+      onLeftIconButtonTouchTap={this.handleToggle}
+      style={{position: "fixed",top:'0',backgroundColor: '#1f497d'}}
+     >
+    
+    <FlatButton style={style.labelStyle} label="Confimed Parcel" onTouchTap={this.confirmParcelNavigation} />
+    <FlatButton style={style.labelStyle} label="Pending Parcel" onTouchTap={this.pendingParcelNavigation} />
+    <FlatButton style={style.buttonBorder} label="Create Parcel" onTouchTap={this.createParcelNavigation} />  
+    <List>
+         <ListItem
+           disabled={true}
+           leftAvatar={
+             <Avatar src="images/profile-img.jpg" style={{width:'34px',height:'34px'}} />
+             
+           }
+         >
+         </ListItem>
+   </List>
+    </AppBar>
+  
+    <Drawer
+   docked={false}
+   width={200}
+   open={this.state.openDrawer}
+   onRequestChange={(openDrawer) => this.setState({openDrawer})}
+   >
+
+ <img src="images/profile-blank.png" 
+ style={{width:'180px',height:'200px'}}/>
+ <center style={{fontWeight:'bold',fontSize:16}}>{retrievedUserDetails.username}</center>
+   <MenuItem onTouchTap={this.handleClose}>
+    <Link to="/parcelHome"> Home </Link>
+   </MenuItem>
+   <MenuItem onTouchTap={this.handleClose}>
+   <Link to ="/confirmParcel">Confirm Parcel</Link>
+   </MenuItem>
+   <MenuItem onTouchTap={this.handleClose}>
+   <Link to ="/pendingParcel">Pending Parcel</Link>
+   </MenuItem>
+   <MenuItem onTouchTap={this.handleClose}>
+   <Link to ="/createParcel">Create Parcel</Link>
+   </MenuItem>
+   <MenuItem onTouchTap={this.handleLogout}>
+   Logout
+   </MenuItem>
+ </Drawer>
+  </div>
+)
+    }
 	}
 }

@@ -5,6 +5,21 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
 import {Grid} from 'react-bootstrap';
+
+const userInfo=[
+    {
+    username: "Jit",
+    password: "123456",
+    roleType: 'A' 
+  },
+  {
+    username: "Operator",
+    password: "123456",
+    roleType: 'B'
+  }
+]
+
+
 export default class Login extends React.Component {
   constructor(props){
     super(props);
@@ -97,9 +112,29 @@ export default class Login extends React.Component {
   }
 
   loginClick=()=>{
-    this.setState({signUpStatus:false});
+    userInfo.forEach((data)=>{
+      if(data.username==this.state.username && data.password==this.state.password){
+        alert('Successfully Login');
+        sessionStorage.setItem('userLoginDetails',JSON.stringify(data));
+        if(data.roleType=="A"){
+        this.context.router.push('/');
+        }else if(data.roleType=="B"){
+          this.context.router.push('/parcelHome');
+        }
+      }
+    })
+    // sessionStorage.setItem('userLoginDetails',JSON.stringify(userLoginDetails));
+     let retrievedUserDetails= JSON.parse(sessionStorage.getItem('userLoginDetails'));
+    console.log(retrievedUserDetails);
   }
   render() {
+    /*console.log("----Session ID Login----");
+    sessionStorage.setItem("userId", "A100");
+    sessionStorage.setItem("emailId", "jitendra.chauhan2@wipro.com");
+    let id =sessionStorage.getItem("userId");
+    let emailid =sessionStorage.getItem("emailId");
+    console.log(id);
+    console.log(emailid);*/
     if(this.state.signUpStatus==false){
       return (
 
@@ -109,7 +144,7 @@ export default class Login extends React.Component {
         {/* <pap style={{height:'300px',width:'500px',backgroundColor:'white',marginTop:'200px'}}> */}
 
 
-        <h2>
+        <h2 style={{marginTop: '10px'}}>
         Please enter your credentials
         </h2><br/>
 
@@ -130,16 +165,17 @@ export default class Login extends React.Component {
         <TextField
       hintText="User Name"
       floatingLabelText="Enter User Name"
+      onChange = {(event,newValue) => this.setState({username:newValue})}
     /><br />
     <TextField
       hintText=" Password"
-     
+      onChange = {(event,newValue) => this.setState({password:newValue})}
       floatingLabelText="Enter Password"
     /><br />
         <div style={{marginTop:"50px"}}>
-        <RaisedButton label="Login" primary={true}  onClick={this.handleClick}/>
+        <RaisedButton label="Login" primary={true}  onTouchTap={this.loginClick}/>
         <RaisedButton label="Sign Up" primary={true} style={{marginLeft:'50px'}} onClick={this.signUp}/>
-</div>
+        </div>
         </Paper>
         </center>
         </div>

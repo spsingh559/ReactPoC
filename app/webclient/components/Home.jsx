@@ -13,7 +13,7 @@ import TradeSummaryPublished from './Dashboard/TradeSummaryPublished.jsx';
 export default class Home extends React.Component {
   
   render() {
-    sessionStorage.setItem("name","Shyam");
+  
       return (
         <Grid style={{marginTop:"90px"}}>  
         

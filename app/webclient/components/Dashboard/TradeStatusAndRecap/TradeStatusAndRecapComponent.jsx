@@ -3,7 +3,7 @@ import React from 'react';
 import {Grid,Row,Col} from 'react-bootstrap';
 import ConfirmTradeComponent from './ConfirmTradeComponent.jsx';
 import MyTaskComponent from './MyTaskComponent.jsx';
-import TradeRecapComponent from './TradeRecapComponent.jsx';
+import TradeRecapComponent from '../TradeRecap/TradeRecapComponent.jsx';
 export default class TradeStatusAndRecapComponent extends React.Component {
   
   render() {

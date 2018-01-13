@@ -8,6 +8,7 @@ import DatePicker from 'material-ui/DatePicker';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
+
 import {Table,TableBody,TableHeader,TableHeaderColumn,TableRow,TableRowColumn} from 'material-ui/Table';
 
 const style={
@@ -19,15 +20,39 @@ colStyle:{
 },
 btnStyle:{
 margin:"10px 30px"
-}
+},
+tradeViewDetails:{
+  color: "#337ab7",
+  lineHeight:"8"
+},
 }
 export default class NewTradeComponent extends React.Component {
   state = {
     value: "",
     open: false,
     firstPartyTxt:"",
+    secondPartyTxt:"",
+    incoTrem:"",
+    tradeLocation:"",
+    tradeLocationSub:"",
+    deliveryDateFrom:"",
+    deliveryDateTo:"",
+    laycanDateFrom:"",
+    laycanDateTo:"",
+    commodity:"",
+    productName:"",
+    tradeVolume:"",
+    qualityApi:"",
+    qualitySul:"",
+    tradeTolerence:"",
+    tradePriceType:"",
+    tradeIndex:"",
+    tradePriceUoM:0,
+    tradeAssociatedFees:0,
+    tradeComment:"",
     showCheckboxes: false,
     height: '300px',
+    volume:0
     };
   
     handleOpen = () => {
@@ -37,31 +62,77 @@ export default class NewTradeComponent extends React.Component {
     handleClose = () => {
       this.setState({open: false});
     };
-  
-    handleChange = (event, index, value) => this.setState({value});
-
-    handleSubmit(event) {
-      alert('A name was submitted: ' + this.state.value);
-      event.preventDefault();
-    }
 
     handleChangeFirstPartyTxt=(e)=>{
       this.setState({firstPartyTxt:e.target.value});
     }
+    handleChangevolume=(e)=>{
+      this.setState({volume:e.target.value});
+    }
+    handleChangeSecondPartyTxt=(event, index, value) => this.setState({secondPartyTxt:value});
+    handleChangeIncoTrem=(event, index, value) => this.setState({incoTrem:value});
+    handleChangeTradeLocation=(event, index, value) => this.setState({tradeLocation:value});
+    handleChangeTradeLocationSub=(event, index, value) => this.setState({tradeLocationSub:value});
+    handleChangeDeliveryDateFrom = (event, date) => this.setState({deliveryDateFrom: date,});
+    handleChangeDeliveryDateTo = (event, date) => this.setState({deliveryDateTo: date,});
+    handleChangeLaycanDateFrom = (event, date) => this.setState({laycanDateFrom: date,});
+    handleChangeLaycanDateTo = (event, date) => this.setState({laycanDateTo: date,});
+    handleChangeCommodity = (event, index, value) => this.setState({commodity:value});
+    handleChangeProductName = (event, index, value) => this.setState({productName:value});
+    handleChangeTradeVolume = (event, index, value) => this.setState({tradeVolume:value});
+    handleChangeQualityApi = (event, index, value) => this.setState({qualityApi:event.target.value});
+    handleChangeQualitySul = (event, index, value) => this.setState({qualitySul:event.target.value});
+    handleChangeTradeTolerence = (event, index, value) => this.setState({tradeTolerence:event.target.value});
+    handleChangePriceType = (event, index, value) => this.setState({tradePriceType:event.target.value});
+    handleChangeTradeIndex = (event, index, value) => this.setState({tradeIndex:value});
+    handleChangeTradePriceUoM = (event, index, value) => this.setState({tradePriceUoM:event.target.value});
+    // handleChangeTradeAssociatedfees = (event, index, value) => this.setState({tradeAssociatedFees:value});
+    handleChangeTradeComment = (event, index, value) => this.setState({tradeComment:event.target.value});
+    handleChangeTradeAssociatedfees=(e)=>{
+      this.setState({tradeAssociatedFees:e.target.value});
+    }
 
     submitNewTrade=()=>{
+        
       var newTradeObj={
-        firstPartyTxt:this.state.firstPartyTxt
+        firstPartyTxt:this.state.firstPartyTxt,
+        secondPartyTxt:this.state.secondPartyTxt,
+        incoTrem:this.state.incoTrem,
+        tradeLocation:this.state.tradeLocation,
+        tradeLocationSub:this.state.tradeLocationSub,
+        deliveryDateFrom:this.formatDate(this.state.deliveryDateFrom),
+        deliveryDateTo:this.formatDate(this.state.deliveryDateTo),
+        laycanDateFrom:this.formatDate(this.state.laycanDateFrom),
+        laycanDateTo:this.formatDate(this.state.laycanDateTo),
+        commodity:this.state.commodity,
+        productName:this.state.productName,
+        tradeVolume:this.state.tradeVolume,
+        qualityApi:this.state.qualityApi,
+        qualitySul:this.state.qualitySul,
+        tradeTolerence:this.state.tradeTolerence,
+        priceType:this.state.tradePriceType,
+        tradeIndex:this.state.tradeIndex,
+        tradePriceUoM:this.state.tradePriceUoM,
+        tradeAssociatedFees:this.state.tradeTolerence,
+        volume:this.state.volume,
+        totalAmount:((parseInt(this.state.tradePriceUoM) * parseInt(this.state.volume)) + (parseInt(this.state.tradeTolerence)))
+
       }
 
       this.props.submitNewTrade(newTradeObj);
-      console.log(newTradeObj);
+      //console.log(newTradeObj);
       
     }
+    formatDate = (date) => { 
+      if(date !== ""){
+        return date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();
+        }
+    }
+    
   
   render() {
-    console.log('-------------data of first textbox--------');
-    console.log(this.state.firstPartyTxt);
+   // console.log('-------------data of first textbox--------');
+//console.log(this.state);
     
     
     const actions = [
@@ -79,7 +150,7 @@ export default class NewTradeComponent extends React.Component {
           <Grid>
           <form>
           <Row>
-            <Col xs={6}><h1>New Trader</h1>
+            <Col xs={6}><h1>New Trade</h1>
             </Col>
             <Col>
             <RaisedButton label="Submit" primary={true} style={{float:"right",marginTop:"40px"}}
@@ -100,16 +171,15 @@ export default class NewTradeComponent extends React.Component {
           /></Col>
           <Col xs={4}><SelectField name="secondParty"
            style={style.textStyle}
-           hintText="2st Party"
-          floatingLabelText="2nd Party"
-          value={this.state.value}
-          onChange={this.handleChange}
+           hintText="Counterparty"
+          floatingLabelText="Counterparty"
+          value={this.state.secondPartyTxt}
+          onChange={this.handleChangeSecondPartyTxt}
         >
-          <MenuItem value={1} primaryText="STAT-OIL" />
-          <MenuItem value={2} primaryText="Every Night" />
-          <MenuItem value={3} primaryText="Weeknights" />
-          <MenuItem value={4} primaryText="Weekends" />
-          <MenuItem value={5} primaryText="Weekly" />
+          <MenuItem value="STAT-OIL" primaryText="STAT-OIL" />
+          <MenuItem value="BP" primaryText="BP" />
+          <MenuItem value="Mercuria" primaryText="Mercuria" />
+      
         </SelectField></Col>
           <Col xs={4} style={style.textStyle}></Col>
           
@@ -117,44 +187,45 @@ export default class NewTradeComponent extends React.Component {
            style={style.textStyle}
            hintText="INCO Term"
           floatingLabelText="INCO Term"
-          value=""
-          onChange={this.handleChange}
+          value={this.state.incoTrem}
+          onChange={this.handleChangeIncoTrem}
         >
-          <MenuItem value={1} primaryText="BRENT" />
-          <MenuItem value={2} primaryText="Every Night" />
-          <MenuItem value={3} primaryText="Weeknights" />
-          <MenuItem value={4} primaryText="Weekends" />
-          <MenuItem value={5} primaryText="Weekly" />
+          <MenuItem value={"FOB"} primaryText="FOB" />
+          <MenuItem value={"DES"} primaryText="DES" />
         </SelectField></Col>
           <Col xs={4}><SelectField name="tradeLocation"
            style={style.textStyle}
-           hintText="Trade Location"
-          floatingLabelText="Trade Location"
-          value=""
-          onChange={this.handleChange}
+           hintText="Trade Location "
+          floatingLabelText="Trade Location "
+          value={this.state.tradeLocation}
+          onChange={this.handleChangeTradeLocation}
         >
-          <MenuItem value={1} primaryText="NETHERLANDS" />
-          <MenuItem value={2} primaryText="Every Night" />
-          <MenuItem value={3} primaryText="Weeknights" />
-          <MenuItem value={4} primaryText="Weekends" />
-          <MenuItem value={5} primaryText="Weekly" />
+          <MenuItem value="NETHERLANDS" primaryText="NETHERLANDS" />
+          <MenuItem value="Germany" primaryText="Germany" />
+          <MenuItem value="Great Britain" primaryText="Great Britain" />
+          <MenuItem value="France" primaryText="France" />
+          <MenuItem value="India" primaryText="India" />
         </SelectField></Col>
          <Col xs={4}><SelectField name="tradeSub"
           style={style.textStyle}
-          floatingLabelText="A"
-          value=""
-          onChange={this.handleChange}
+          floatingLabelText="Trade Location City"
+          value={this.state.tradeLocationSub}
+          onChange={this.handleChangeTradeLocationSub}
         >
-          <MenuItem value={false} primaryText="No" />
-          <MenuItem value={true} primaryText="Yes" />
+          <MenuItem value="Amsterdam" primaryText="Amsterdam" />
+          <MenuItem value="Frankfurt" primaryText="Frankfurt" />
+          <MenuItem value="London" primaryText="London" />
+          <MenuItem value="Paris" primaryText="Paris" />
+          <MenuItem value="Chennai" primaryText="Chennai" />
         </SelectField></Col>
         <Col xs={6}>
        <Col xs={6} style={style.colStyle}>
         <DatePicker name="fromDate"
           style={style.textStyle}
           textFieldStyle={style.textStyle}
-            onChange={this.handleChangeMaxDate}
+            onChange={this.handleChangeDeliveryDateFrom}
             autoOk={this.state.autoOk}
+           
             floatingLabelText="Delivery Date"
             defaultDate={this.state.maxDate}
             disableYearSelection={this.state.disableYearSelection}
@@ -164,9 +235,10 @@ export default class NewTradeComponent extends React.Component {
          <DatePicker name="endDate"
           style={style.textStyle}
           textFieldStyle={{height:"71px",width:"100%",lineHeight:"6"}}
-            onChange={this.handleChangeMaxDate}
+            onChange={this.handleChangeDeliveryDateTo}
+            
             autoOk={this.state.autoOk}
-            floatingLabelText=""
+            floatingLabelText=" To"
             defaultDate={this.state.maxDate}
             disableYearSelection={this.state.disableYearSelection}
           />
@@ -179,8 +251,9 @@ export default class NewTradeComponent extends React.Component {
        <DatePicker name="lcFromDate"
          style={style.textStyle}
          textFieldStyle={style.textStyle}
-           onChange={this.handleChangeMaxDate}
+           onChange={this.handleChangeLaycanDateFrom}
            autoOk={this.state.autoOk}
+           
            floatingLabelText="Laycan Date"
            defaultDate={this.state.maxDate}
            disableYearSelection={this.state.disableYearSelection}
@@ -190,10 +263,9 @@ export default class NewTradeComponent extends React.Component {
          <DatePicker name="lcFromDate"
           style={style.textStyle}
           textFieldStyle={{height:"71px",width:"100%",lineHeight:"6"}}
-            onChange={this.handleChangeMaxDate}
+          floatingLabelText="To"
+            onChange={this.handleChangeLaycanDateTo}
             autoOk={this.state.autoOk}
-            floatingLabelText=""
-            defaultDate={this.state.maxDate}
             disableYearSelection={this.state.disableYearSelection}
           />
          </Col>
@@ -207,14 +279,10 @@ export default class NewTradeComponent extends React.Component {
            style={style.textStyle}
            hintText="Commodity"
           floatingLabelText="Commodity"
-          value=""
-          onChange={this.handleChange}
+          value={this.state.commodity}
+          onChange={this.handleChangeCommodity}
         >
-          <MenuItem value={1} primaryText="STAT-OIL" />
-          <MenuItem value={2} primaryText="Every Night" />
-          <MenuItem value={3} primaryText="Weeknights" />
-          <MenuItem value={4} primaryText="Weekends" />
-          <MenuItem value={5} primaryText="Weekly" />
+          <MenuItem value="Crude Oil" primaryText="Crude Oil" />
         </SelectField></Col>
           <Col xs={4} style={style.textStyle}></Col>
           <Col xs={4} style={style.textStyle}> </Col>
@@ -222,45 +290,52 @@ export default class NewTradeComponent extends React.Component {
            style={style.textStyle}
            hintText="Product Name"
           floatingLabelText="Product Name"
-          value=""
-          onChange={this.handleChange}
+          value={this.state.productName}
+          onChange={this.handleChangeProductName}
         >
-          <MenuItem value={1} primaryText="STAT-OIL" />
-          <MenuItem value={2} primaryText="Every Night" />
-          <MenuItem value={3} primaryText="Weeknights" />
-          <MenuItem value={4} primaryText="Weekends" />
-          <MenuItem value={5} primaryText="Weekly" />
+          <MenuItem value="BRENT" primaryText="BRENT" />
         </SelectField></Col>
-        <Col xs={4}><SelectField name="volume"
+        <Col xs={4}>
+        <TextField name="volume"
            style={style.textStyle}
-           hintText="Voulme"
-          floatingLabelText="Volume"
-          value=""
-          onChange={this.handleChange}
+           hintText="Volume"
+          floatingLabelText="Enter Volume"
+          value={this.state.volume}
+          onChange={this.handleChangevolume}
+          />
+        </Col>
+        <Col xs={4}>
+        <SelectField name="volume"
+           style={style.textStyle}
+           hintText="Voulme Type"
+          floatingLabelText="Volume Type"
+          value={this.state.tradeVolume}
+          onChange={this.handleChangeTradeVolume}
         >
-          <MenuItem value={1} primaryText="STAT-OIL" />
-          <MenuItem value={2} primaryText="Every Night" />
-          <MenuItem value={3} primaryText="Weeknights" />
-          <MenuItem value={4} primaryText="Weekends" />
-          <MenuItem value={5} primaryText="Weekly" />
+          <MenuItem value="KEBL" primaryText="KEBL" />
+      
         </SelectField></Col>
         <Col xs={4} style={style.textStyle}></Col>
         <Col xs={4}> <TextField name="qapi"
            style={style.textStyle}
       hintText="Quality (API)"
-     
+     value={this.state.qualityApi}
       floatingLabelText="Quality (API)"
-      
+      onChange={this.handleChangeQualityApi}
     /></Col>
               <Col xs={4}> <TextField name="qsul"
            style={style.textStyle}
           hintText="Quality (SUL)"
           floatingLabelText="Quality (SUL)"
+          value={this.state.qualitySul}
+          onChange={this.handleChangeQualitySul}
     /></Col>
               <Col xs={4}> <TextField name="tolerence"
            style={style.textStyle}
       hintText="Tolerence"
       floatingLabelText="Tolerence"
+      value={this.state.tradeTolerence}
+      onChange={this.handleChangeTradeTolerence}
     /></Col>
           </Col>
             </Row>
@@ -270,50 +345,46 @@ export default class NewTradeComponent extends React.Component {
           <Col xs={4}> <TextField name="priceType"
            style={style.textStyle}
       hintText="Price Type"
-     
+     value={this.state.tradePriceType}
       floatingLabelText="Price Type"
-     
+     onChange={this.handleChangePriceType}
     /></Col>
           <Col xs={4}><SelectField name="index"
            style={style.textStyle}
            hintText="Index"
           floatingLabelText="Index"
-          value=""
-          onChange={this.handleChange}
+          value={this.state.tradeIndex}
+          onChange={this.handleChangeTradeIndex}
         >
-          <MenuItem value={1} primaryText="STAT-OIL" />
-          <MenuItem value={2} primaryText="Every Night" />
-          <MenuItem value={3} primaryText="Weeknights" />
-          <MenuItem value={4} primaryText="Weekends" />
-          <MenuItem value={5} primaryText="Weekly" />
+          <MenuItem value="LOREUM" primaryText="LOREUM" />
         </SelectField></Col>
           <Col xs={4} style={style.textStyle}></Col>
-          <Col xs={4}> <TextField name="priceUoM"
+          <Col xs={4}> 
+          <TextField name="priceUoM"
            style={style.textStyle}
       hintText="Price + UoM"
-     
+     value={this.state.tradePriceUoM}
       floatingLabelText="Price + UoM"
-     
-    /></Col>
-          <Col xs={5}><SelectField name="associatedFees"
+     onChange={this.handleChangeTradePriceUoM}
+    />
+    </Col>
+          <Col xs={5}>
+
+          <TextField name="associatedFees"
            style={style.textStyle}
            hintText="Associated Fees"
           floatingLabelText="Associated Fees (Total)"
-          value=""
-          onChange={this.handleChange}
-        >
-          <MenuItem value={1} primaryText="STAT-OIL" />
-          <MenuItem value={2} primaryText="Every Night" />
-          <MenuItem value={3} primaryText="Weeknights" />
-          <MenuItem value={4} primaryText="Weekends" />
-          <MenuItem value={5} primaryText="Weekly" />
-        </SelectField></Col>
-        <Col xs={3} style={style.colStyle}><div label="Dialog" onClick={this.handleOpen} style={{lineHeight:"8"}}>VIEW/EDIT DETAILS</div>
+          value={this.state.tradeAssociatedFees}
+          onChange={this.handleChangeTradeAssociatedfees}    />
+          
+       </Col>
+        <Col xs={3} style={style.colStyle}><div label="Dialog" style={style.tradeViewDetails} onClick={this.handleOpen}>VIEW/EDIT DETAILS</div>
         </Col>
-        <Col xs={4}><div style={{fontSize:'12px'}}>Total Amount</div><div style={{fontSize:'20px'}}><b>$7.22 mn</b></div></Col>
+        <Col xs={4}><div style={{fontSize:'12px'}}>Total Amount</div><div style={{fontSize:'20px'}}><b>
+          {((parseInt(this.state.tradePriceUoM) * parseInt(this.state.volume)) + (parseInt(this.state.tradeTolerence)))}</b></div></Col>
           </Col>
           <Col xs={6}>
-         <textarea className="newTrade_textarea" placeholder="Enter your comments...">
+         <textarea className="newTrade_textarea" value={this.state.tradeComment} onChange={this.handleChangeTradeComment} placeholder="Enter your comments...">
 
            </textarea>
           </Col>
@@ -356,7 +427,7 @@ export default class NewTradeComponent extends React.Component {
       <TableRow>
         <TableRowColumn>Marine Freight Estimate</TableRowColumn>
         <TableRowColumn>100%</TableRowColumn>
-        <TableRowColumn>$ 650,000</TableRowColumn>
+        <TableRowColumn></TableRowColumn>
       </TableRow>
       <TableRow>
         <TableRowColumn>Inspector Fees</TableRowColumn>
@@ -391,8 +462,7 @@ export default class NewTradeComponent extends React.Component {
             <div className="terms_conditions">
             <h3>General Terms and Condition</h3>
             <h4>This Trade comes under the <a href="#">terms and condition</a> of:</h4>
-            <RaisedButton label="SHELL" primary={true} style={style} />
-            <RaisedButton label="STAT-OIL" primary={true} style={style.btnStyle} />
+            <RaisedButton label="Upload GTC" primary={true} style={style} />
             </div>
             </Row>
             </Grid>

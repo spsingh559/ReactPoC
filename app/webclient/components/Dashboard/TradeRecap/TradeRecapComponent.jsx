@@ -1,7 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router';
-
 import Paper from 'material-ui/Paper';
+
+import TradeRecapChartComponent from './TradeRecapChartComponent.jsx';
+
+
 const style={
   paperStyle:{
     width: "574px",
@@ -17,11 +19,32 @@ const style={
 
 export default class TradeStatusAndRecapComponent extends React.Component {
   
+  state={
+    tradeRecapData:[
+      
+      {
+        text:"Mercuria",
+        value:4,
+        value:8
+      },
+      {
+        text:"Statoil",
+        value:4,
+        value:6
+      },
+      {
+        text:"BP",
+        value:5,
+        value:6
+      }
+    ]
+  }
+
   render() {
       return (
         
           <div style={style.paperStyle} zDepth={2} >
-        TradeRecap
+         <TradeRecapChartComponent tradeRecapData={this.state.tradeRecapData} />
            </div>
           
       )

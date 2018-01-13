@@ -17,6 +17,10 @@ import ParentNewTrade from './components/NewTrade/ParentNewTrade.jsx';
 import TradeRecapComponent from './components/TradeRecap/TradeRecapComponent.jsx';
 import ConfirmTradeComponent from './components/ConfirmTrade/ConfirmTradeComponent.jsx'
 import Login from './components/Login.jsx';
+import parcelHome from './components/Parcel/parcelHome.jsx';
+import confirmParcel from './components/Parcel/confirmParcel.jsx';
+import pendingParcel from './components/Parcel/pendingParcel.jsx';
+import createParcel from './components/Parcel/createParcel.jsx';
 
 import {Route, Router, IndexRoute, hashHistory} from 'react-router';
 ReactDOM.render(
@@ -27,6 +31,10 @@ ReactDOM.render(
 	<Route path="/newTrade" component={ParentNewTrade} />
 	<Route path="/tradeRecap" component={TradeRecapComponent} />
 	<Route path="/confirmTrade" component={ConfirmTradeComponent} />
+	<Route path="/parcelHome" component={parcelHome} />
+	<Route path="/confirmParcel" component={confirmParcel} />
+	<Route path="/pendingParcel" component={pendingParcel} />
+	<Route path="/createParcel" component={createParcel} />
 		<IndexRoute component={Home} />
 		</Route>
 	</Router>
